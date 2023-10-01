@@ -1,0 +1,6 @@
+requests
+pandas
+pyilz
+discord.py
+cairosvg
+python-dotenv
