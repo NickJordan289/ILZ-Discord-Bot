@@ -32,6 +32,17 @@ if debug: print('USDC-ETH conversion', usdc_conversion)
 aud_conversion = helpers.get_aud_price()
 if debug: print('ETH-AUD conversion', aud_conversion)
 
+def get_illuvium_name(wallet):
+    try:
+        url = f'https://api.illuvium-game.io/gamedata/illuvitars/album/query?wallet={wallet}'
+        response = requests.get(url)
+        json = response.json()
+        name = json['name']
+    except Exception as e:
+        name = ''
+    return name
+
+
 async def send_message(row, tokentrove_data):
     asset_id = row['asset_id']
     meta = get_plot_metadata(row['asset_id'])
@@ -42,6 +53,8 @@ async def send_message(row, tokentrove_data):
     erc20 = row['erc20']
     aud = row['aud']
     tier = meta['tier']
+    user = row['user']
+    user_name = get_illuvium_name(user)
     balanced_element = helpers.is_balanced_elements(meta)
     balanced_fuel = helpers.is_balanced_fuel(meta)
 
@@ -85,6 +98,7 @@ async def send_message(row, tokentrove_data):
         if tier > 1:
             embed.add_field(name="Balanced Fuel", value=balanced_fuel, inline=False)
         embed.add_field(name=f"Less than Floor ({tier_floor_price:.4f} ETH)", value=less_than_floor, inline=True)
+        embed.add_field(name=f"Listing User", value=f'[{user_name}](https://illuvidex.illuvium.io/ranger/{user_name})', inline=False)
         try:
             import_url = helpers.get_import_url(asset_id)
             embed.add_field(name="Simulator Link", value=f"[View Plot]({import_url})", inline=False)
@@ -98,7 +112,7 @@ async def send_message(row, tokentrove_data):
 
 if __name__ == '__main__':
     tokentrove_data = helpers.load_tokentrove()
-    delay = 60*3
+    delay = 60
     if not debug: last_timestamp = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(time.time() - delay))
     else: last_timestamp = '2023-10-01T00:00:00Z'
     while True:
