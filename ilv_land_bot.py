@@ -22,6 +22,10 @@ watched_plots = [
     (152,368),
     (668,358),
     (152,368),
+    (228,409),
+    (850,350),
+    (793,344),
+    (761,287),
 ]
 
 discord_webook =  os.getenv('DISCORD_WEBHOOK_URL')
