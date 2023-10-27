@@ -70,6 +70,11 @@ async def send_message(row, tokentrove_data):
     timestamp = row['updated_timestamp']
 
     neighbouring = helpers.is_neighbour(int(x), int(y), watched_plots)
+
+    if not neighbouring:
+        if tier == 1 and not less_than_floor:
+            return
+
     svg_code = requests.get(svg).content
     name = svg.split('/')[-1].split('.')[0]
     svg2png(bytestring=svg_code,write_to=f'{name}.png')
@@ -115,7 +120,6 @@ async def send_message(row, tokentrove_data):
 
 
 if __name__ == '__main__':
-    tokentrove_data = helpers.load_tokentrove()
     delay = 60
     if not debug: last_timestamp = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(time.time() - delay))
     else: last_timestamp = '2023-10-01T00:00:00Z'
@@ -126,7 +130,9 @@ if __name__ == '__main__':
             if len(df) > 0:
                 print(f'Found {len(df)} new listings')
                 for index, row in df.iterrows():
-                    if not debug: asyncio.run(send_message(row, tokentrove_data))
+                    if not debug: 
+                        tokentrove_data = helpers.load_tokentrove()
+                        asyncio.run(send_message(row, tokentrove_data))
                     else: print(row)
                 max_timestamp = df['updated_timestamp'].max()
                 max_timestamp += pd.Timedelta(seconds=1)
