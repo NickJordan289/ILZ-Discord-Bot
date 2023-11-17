@@ -131,7 +131,7 @@ async def send_message(row, tokentrove_data):
             print('Failed to generate simulator link')
 
         webhook = Webhook.from_url(discord_webook, session=session)
-        await webhook.send(embed=embed, file=file)
+        await webhook.send(content=f"{title} \nTier {tier} \n{eth:.4f} ETH", embed=embed, file=file)
     os.remove(f"{name}.png")
 
 
