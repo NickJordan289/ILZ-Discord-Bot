@@ -26,6 +26,8 @@ watched_plots = [
     (850, 350),
     (793, 344),
     (761, 287),
+    (670, 510),
+    (574, 562),
 ]
 
 discord_webook = os.getenv('DISCORD_WEBHOOK_URL')
@@ -141,7 +143,7 @@ if __name__ == '__main__':
         last_timestamp = time.strftime(
             '%Y-%m-%dT%H:%M:%SZ', time.gmtime(time.time() - delay))
     else:
-        last_timestamp = '2023-10-01T00:00:00Z'
+        last_timestamp = '2024-07-19T12:24:11Z'
     while True:
         try:
             if debug:
